@@ -1,47 +1,45 @@
 import Image from "next/image";
 import { ubuntu } from "@/data/constants/fonts";
 import profileImg from "@/public/profile.jpg";
-import { TypewriterEffect } from "./ui/typewritet-effect";
-import { color } from "framer-motion";
 import { FlipWords } from "./ui/flip-words";
+import { personalInfo } from "@/data/index";
 
 export default function HeroSection() {
   return (
     <div className="flex flex-col items-center justify-center gap-6 text-center py-32 z-50 relative">
       <div className="rounded-full overflow-hidden w-32 h-32">
-        <Image src={profileImg} alt="profile photo" />
+        <Image src={profileImg} alt={`${personalInfo.name} profile photo`} />
       </div>
-      <h2 className={`font-semibold text-lg`}>Hi, I&apos;m Glorious 🤗</h2>
+      <h2 className={`font-semibold text-lg`}>
+        Hi, I&apos;m {personalInfo.name}
+      </h2>
       <h1
         className={`${ubuntu.className} font-bold text-3xl md:text-5xl flex flex-col`}
       >
-        <span>From Design to Development,</span>
+        <span>From APIs to Interfaces,</span>
         <span>
-          <span className="text-yellow-500">I Craft Exceptional</span> <br />
+          <span className="text-yellow-500">I Build</span> <br />
           <FlipWords
             words={[
-              "Web Experiences",
-              "Impactful Experiences",
-              "Scalable Solutions",
-              "Interactive Experiences",
-              "User-Centric Solutions",
+              "Full Stack Applications",
+              "Backend Services",
+              "RESTful APIs",
+              "Scalable Systems",
+              "Cloud Native Deployments",
             ]}
             className="dark:text-yellow-700 text-amber-600 text-center h-[72px] sm:h-auto"
           />
           <span className="hidden md:inline">.</span>
         </span>
       </h1>
-      <p className="lg:text-md dark:text-slate-300">
-        Leveraging my expertise in both <b>front-end</b>{" "}
-        <br className="hidden md:block" /> and <b>back-end</b> development, I
-        bring ideas to life, <br className="hidden md:block" /> crafting
-        seamless user experiences and robust functionality
+      <p className="lg:text-md dark:text-slate-300 max-w-2xl">
+        {personalInfo.tagline}
       </p>
       <a
         href="#contact"
         className="uppercase font-semibold text-xs bg-cool-black dark:bg-white dark:text-black text-white rounded-full px-8 py-4 flex items-center justify-center hover:scale-105 active:scale-100 transition-all duration-300"
       >
-        <span>schedule a call</span>
+        <span>get in touch</span>
       </a>
     </div>
   );

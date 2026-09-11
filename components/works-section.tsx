@@ -7,25 +7,27 @@ import { works } from "@/data/index";
 
 export default function Works() {
   return (
-    <section id="works" className="pb-32">
+    <section id="projects" className="pb-32">
       <h1
         className={`${oswald.className} font-semibold text-2xl md:text-4xl flex flex-col text-center`}
       >
-        <span className="text-base text-amber-600">Works</span>
+        <span className="text-base text-amber-600">Projects</span>
         <span>
           <span>Here are</span>{" "}
           <span className="text-yellow-500">My Latest Projects</span>
         </span>
-        <span>with their presentations</span>
+        <span>with live demos and source code</span>
       </h1>
-      <BentoGrid className="mx-auto md:auto-rows-[20rem] py-10">
+      <BentoGrid className="mx-auto md:auto-rows-fr py-10">
         {works.map((item, i) => (
           <BentoGridItem
             key={i}
             title={item.title}
-            link={item.link}
+            github={item.github}
+            live={item.live}
             description={item.description}
             image={item.image}
+            techStack={item.techStack}
             className={cn("md:col-span-1")}
           />
         ))}

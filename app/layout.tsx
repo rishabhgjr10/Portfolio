@@ -5,11 +5,27 @@ import { inter } from "@/data/constants/fonts";
 import { ToggleButton } from "@/components/toggle-theme";
 import Footer from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react";
+import { personalInfo } from "@/data/index";
 
 export const metadata: Metadata = {
-  title: "Glorious's Portfolio",
+  title: "Rishabh Gurjar | Software Engineer Portfolio",
   description:
-    "An elegant and visually appealing portfolio showcasing the work and career of Glorious.",
+    "Portfolio of Rishabh Gurjar, a backend-focused Software Engineer building full-stack web and backend applications with Java, Spring Boot, C#, ASP.NET, Next.js, and cloud-native deployments.",
+  keywords: [
+    "Rishabh Gurjar",
+    "Software Engineer",
+    "Backend Engineer",
+    "Full-Stack Developer",
+    "Java",
+    "Spring Boot",
+    "C#",
+    "ASP.NET",
+    "Next.js",
+    "Accenture",
+    "Verdikt",
+    "Portfolio",
+  ],
+  authors: [{ name: personalInfo.name }],
 };
 
 export default function RootLayout({
