@@ -5,6 +5,10 @@
     A modern, responsive personal portfolio built with <strong>Next.js 14</strong>, <strong>Tailwind CSS</strong>, and <strong>Framer Motion</strong> — showcasing backend-focused software engineering, full-stack projects, and professional experience.
   </p>
 
+  <h3>
+    <a href="https://portfolio-zeta-two-w94sqpil2g.vercel.app/">🌐 View Live Demo</a>
+  </h3>
+
   <p>
     <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-14-black?logo=next.js" alt="Next.js" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white" alt="React" /></a>
