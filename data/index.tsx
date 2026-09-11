@@ -34,9 +34,19 @@ export interface Experience {
   ico?: ReactNode;
   title: string;
   company: string;
+  type?: string;
   location: string;
   period: string;
   description: string;
+  skills?: string[];
+}
+
+export interface Education {
+  degree: string;
+  institution: string;
+  period: string;
+  grade: string;
+  highlights?: string[];
 }
 
 export interface SocialLink {
@@ -67,6 +77,7 @@ export const navItems: NavItem[] = [
   { name: "About", link: "#about" },
   { name: "Projects", link: "#projects" },
   { name: "Experience", link: "#experience" },
+  { name: "Education", link: "#education" },
   { name: "Contact", link: "#contact" },
 ];
 
@@ -159,10 +170,45 @@ export const experience: Experience[] = [
     ico: <Server />,
     title: "Associate Software Engineer",
     company: "Accenture",
+    type: "Full-time · Hybrid",
     location: "Gurugram, Haryana",
     period: "Nov. 2025 – Present",
     description:
       "Delivering feature enhancements, defect resolution, and backend improvements for enterprise ASP.NET MVC applications backed by Oracle in a collaborative Agile environment.",
+    skills: ["ASP.NET MVC", "Oracle", "ServiceNow", "AngularJS", "Agile"],
+  },
+  {
+    ico: <Wrench />,
+    title: "Customer Account Executive",
+    company: "Teleperformance",
+    type: "Full-time · On-site",
+    location: "Jaipur, India",
+    period: "Apr. 2025 – Jul. 2025",
+    description:
+      "Handled key customer accounts, resolved service escalations, and maintained client SLA performance.",
+    skills: ["Project Management", "Stakeholder Communication"],
+  },
+  {
+    ico: <Blocks />,
+    title: "Video Editor",
+    company: "Sage Media",
+    type: "Full-time · On-site",
+    location: "Jaipur, India",
+    period: "Jul. 2024 – Nov. 2024",
+    description:
+      "Edited and post-produced short-form and promotional video content, focusing on pacing and narrative flow.",
+    skills: ["Video Editing", "CapCut", "Post-Production"],
+  },
+  {
+    ico: <Code />,
+    title: "Software Trainee",
+    company: "SLK",
+    type: "Internship · Remote",
+    location: "Bengaluru, India",
+    period: "Mar. 2024 – Sep. 2024",
+    description:
+      "Assisted with backend services and developed database queries and procedures using MS SQL Server.",
+    skills: ["Microsoft SQL Server", "Microservices", "Backend Development"],
   },
 ];
 
@@ -172,6 +218,22 @@ export const experienceHighlights = [
   "Resolved 20+ application and environment issues through debugging and root cause analysis, minimizing downtime and improving system reliability.",
   "Enhanced 5+ application modules by implementing business validations and workflow improvements to streamline enterprise processes.",
   "Maintained 3+ enterprise applications through ongoing feature development, defect resolution, and configuration updates in a collaborative Agile environment.",
+];
+
+export const education: Education[] = [
+  {
+    degree: "Bachelor of Technology (BTech) in Computer Engineering",
+    institution: "Jaipur Engineering College and Research Centre (JECRC)",
+    period: "Nov. 2020 – May 2024",
+    grade: "8.42 CGPA",
+    highlights: ["Python", "Data Structures", "Algorithms", "Software Engineering"],
+  },
+  {
+    degree: "Higher Secondary (12th – Science & Mathematics)",
+    institution: "Lakshmipat Singhania School",
+    period: "Mar. 2019 – Mar. 2020",
+    grade: "82.4%",
+  },
 ];
 
 export const socialMedia: SocialLink[] = [

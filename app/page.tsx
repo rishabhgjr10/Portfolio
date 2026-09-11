@@ -1,5 +1,6 @@
 import About from "@/components/about-section";
 import Citation from "@/components/citation-section";
+import Education from "@/components/education-section";
 import Experience from "@/components/experience-section";
 import HeroSection from "@/components/hero-section";
 import Skills from "@/components/skills";
@@ -19,6 +20,8 @@ export default function Home() {
       <Skills />
       <Works />
       <Experience />
+      <Education />
     </main>
   );
 }
+
