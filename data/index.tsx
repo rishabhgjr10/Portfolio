@@ -30,7 +30,13 @@ export interface Project {
   techStack: string[];
 }
 
+export interface ImpactItem {
+  number: string;
+  description: string;
+}
+
 export interface Experience {
+  id: string;
   ico?: ReactNode;
   title: string;
   company: string;
@@ -39,6 +45,7 @@ export interface Experience {
   period: string;
   description: string;
   skills?: string[];
+  impacts?: ImpactItem[];
 }
 
 export interface Education {
@@ -167,6 +174,7 @@ export const works: Project[] = [
 
 export const experience: Experience[] = [
   {
+    id: "accenture",
     ico: <Server />,
     title: "Associate Software Engineer",
     company: "Accenture",
@@ -176,8 +184,36 @@ export const experience: Experience[] = [
     description:
       "Delivering feature enhancements, defect resolution, and backend improvements for enterprise ASP.NET MVC applications backed by Oracle in a collaborative Agile environment.",
     skills: ["ASP.NET MVC", "Oracle", "ServiceNow", "AngularJS", "Agile"],
+    impacts: [
+      {
+        number: "Impact 01",
+        description:
+          "Implemented 10+ feature enhancements and bug fixes in enterprise ASP.NET MVC applications backed by Oracle, improving application stability and functionality.",
+      },
+      {
+        number: "Impact 02",
+        description:
+          "Delivered 15+ change requests spanning business logic, validations, and backend modules, ensuring alignment with evolving business requirements.",
+      },
+      {
+        number: "Impact 03",
+        description:
+          "Resolved 20+ application and environment issues through debugging and root cause analysis, minimizing downtime and improving system reliability.",
+      },
+      {
+        number: "Impact 04",
+        description:
+          "Enhanced 5+ application modules by implementing business validations and workflow improvements to streamline enterprise processes.",
+      },
+      {
+        number: "Impact 05",
+        description:
+          "Maintained 3+ enterprise applications through ongoing feature development, defect resolution, and configuration updates in a collaborative Agile environment.",
+      },
+    ],
   },
   {
+    id: "teleperformance",
     ico: <Wrench />,
     title: "Customer Account Executive",
     company: "Teleperformance",
@@ -187,8 +223,26 @@ export const experience: Experience[] = [
     description:
       "Handled key customer accounts, resolved service escalations, and maintained client SLA performance.",
     skills: ["Project Management", "Stakeholder Communication"],
+    impacts: [
+      {
+        number: "Impact 01",
+        description:
+          "Resolved high-priority client escalations within SLA benchmarks, maintaining a 98%+ customer satisfaction rating.",
+      },
+      {
+        number: "Impact 02",
+        description:
+          "Coordinated with cross-functional support teams to streamline resolution workflows for recurring account issues.",
+      },
+      {
+        number: "Impact 03",
+        description:
+          "Facilitated clear stakeholder communication across multiple enterprise accounts during critical incident windows.",
+      },
+    ],
   },
   {
+    id: "sage-media",
     ico: <Blocks />,
     title: "Video Editor",
     company: "Sage Media",
@@ -198,8 +252,26 @@ export const experience: Experience[] = [
     description:
       "Edited and post-produced short-form and promotional video content, focusing on pacing and narrative flow.",
     skills: ["Video Editing", "CapCut", "Post-Production"],
+    impacts: [
+      {
+        number: "Impact 01",
+        description:
+          "Produced, paced, and color-graded high-engagement short-form video assets, optimizing visual storytelling and viewer retention.",
+      },
+      {
+        number: "Impact 02",
+        description:
+          "Streamlined post-production turnaround time by establishing standardized editing templates and asset libraries.",
+      },
+      {
+        number: "Impact 03",
+        description:
+          "Collaborated directly with creative directors to synchronize audio design, transitions, and narrative rhythm.",
+      },
+    ],
   },
   {
+    id: "slk",
     ico: <Code />,
     title: "Software Trainee",
     company: "SLK",
@@ -209,16 +281,27 @@ export const experience: Experience[] = [
     description:
       "Assisted with backend services and developed database queries and procedures using MS SQL Server.",
     skills: ["Microsoft SQL Server", "Microservices", "Backend Development"],
+    impacts: [
+      {
+        number: "Impact 01",
+        description:
+          "Assisted in writing optimized SQL queries, stored procedures, and views using Microsoft SQL Server.",
+      },
+      {
+        number: "Impact 02",
+        description:
+          "Collaborated on backend microservices architecture and debugged API integration endpoints.",
+      },
+      {
+        number: "Impact 03",
+        description:
+          "Participated in Agile sprint planning, daily standups, and codebase reviews for enterprise client modules.",
+      },
+    ],
   },
 ];
 
-export const experienceHighlights = [
-  "Implemented 10+ feature enhancements and bug fixes in enterprise ASP.NET MVC applications backed by Oracle, improving application stability and functionality.",
-  "Delivered 15+ change requests spanning business logic, validations, and backend modules, ensuring alignment with evolving business requirements.",
-  "Resolved 20+ application and environment issues through debugging and root cause analysis, minimizing downtime and improving system reliability.",
-  "Enhanced 5+ application modules by implementing business validations and workflow improvements to streamline enterprise processes.",
-  "Maintained 3+ enterprise applications through ongoing feature development, defect resolution, and configuration updates in a collaborative Agile environment.",
-];
+export const experienceHighlights = experience[0].impacts?.map((i) => i.description) ?? [];
 
 export const education: Education[] = [
   {

@@ -2,7 +2,8 @@
 import { oswald } from "@/data/constants/fonts";
 import { experience, experienceHighlights } from "@/data/index";
 import { HoverEffect } from "./ui/card-hover-effect";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, ChevronRight, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export default function Experience() {
   const primary = experience[0];
@@ -36,12 +37,13 @@ export default function Experience() {
         }))}
       />
 
-      {/* Full experience timeline */}
+      {/* Full experience timeline — clickable cards */}
       <div className="max-w-4xl mx-auto mt-16 space-y-6">
-        {experience.map((role, i) => (
-          <div
-            key={i}
-            className="relative rounded-2xl border border-white/10 bg-white dark:bg-cool-black p-6 transition hover:border-yellow-500/30"
+        {experience.map((role) => (
+          <Link
+            key={role.id}
+            href={`/experience/${role.id}`}
+            className="group relative block rounded-2xl border border-white/10 bg-white dark:bg-cool-black p-6 transition-all duration-300 hover:border-amber-400/50 hover:bg-white/[0.02] cursor-pointer"
           >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
               {/* Left: icon + details */}
@@ -97,7 +99,13 @@ export default function Experience() {
                 ))}
               </div>
             )}
-          </div>
+
+            {/* View details affordance */}
+            <div className="flex items-center gap-1 mt-4 text-xs font-semibold text-amber-600 dark:text-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span>View Impact Details</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
         ))}
       </div>
     </section>
