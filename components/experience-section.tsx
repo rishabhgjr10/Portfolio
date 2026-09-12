@@ -1,13 +1,10 @@
 "use client";
 import { oswald } from "@/data/constants/fonts";
-import { experience, experienceHighlights } from "@/data/index";
-import { HoverEffect } from "./ui/card-hover-effect";
+import { experience } from "@/data/index";
 import { Calendar, ChevronRight, MapPin } from "lucide-react";
 import Link from "next/link";
 
 export default function Experience() {
-  const primary = experience[0];
-
   return (
     <section className="pb-32" id="experience">
       <h1
@@ -19,26 +16,8 @@ export default function Experience() {
         </span>
       </h1>
 
-      {/* Primary role highlights (Accenture) */}
-      <div className="max-w-3xl mx-auto text-center mt-6">
-        <h2 className="text-xl font-bold dark:text-zinc-100">
-          <span className="text-yellow-500">{primary.title}</span> at{" "}
-          {primary.company}
-        </h2>
-        <p className="text-sm text-zinc-500 mt-1">
-          {primary.period} · {primary.location}
-        </p>
-        <p className="mt-4 dark:text-slate-300">{primary.description}</p>
-      </div>
-      <HoverEffect
-        items={experienceHighlights.map((highlight, index) => ({
-          title: `Impact ${String(index + 1).padStart(2, "0")}`,
-          description: highlight,
-        }))}
-      />
-
       {/* Full experience timeline — clickable cards */}
-      <div className="max-w-4xl mx-auto mt-16 space-y-6">
+      <div className="max-w-4xl mx-auto mt-10 space-y-6">
         {experience.map((role) => (
           <Link
             key={role.id}
