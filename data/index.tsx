@@ -129,6 +129,29 @@ export const aboutHighlights = [
 
 export const works: Project[] = [
   {
+    title: "SnapLink",
+    description:
+      "SnapLink is an enterprise-grade URL shortener, link management, and custom QR code studio built with Java 21 (Spring Boot 3) and React 18. Engineered with Redis cache-aside fallback, Aiven MySQL, OAuth 2.0 via Firebase, and edge proxy routing with zero CORS overhead.",
+    className: "md:col-span-1",
+    image: "/images/works/snaplink.png",
+    github: "https://github.com/rishabhgjr10/Snaplink",
+    live: "https://bauna.xyz",
+    techStack: [
+      "Java 21",
+      "Spring Boot 3",
+      "React 18",
+      "Redis",
+      "MySQL (Aiven)",
+      "Firebase Auth",
+      "Docker",
+      "Tailwind CSS",
+      "Vite",
+      "Render",
+      "Vercel",
+      "Bucket4j",
+    ],
+  },
+  {
     title: "Verdikt",
     description:
       "Verdikt is a decoupled full-stack media review and data aggregation platform built with Java 17 (Spring Boot) and Next.js. It aggregates real-time data across movies, TV shows, books, and video games into a single, unified client experience while implementing resilient backend API handling, environment security, and cloud-native deployments.",
@@ -370,6 +393,8 @@ export const skillsIcons = [
   "dotnet",
   "oracle",
   "mysql",
+  "redis",
+  "firebase",
   "spring",
   "hibernate",
   "typescript",

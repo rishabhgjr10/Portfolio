@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     "Next.js",
     "Accenture",
     "Verdikt",
+    "SnapLink",
     "Portfolio",
   ],
   authors: [{ name: personalInfo.name }],
