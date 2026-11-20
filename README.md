@@ -6,7 +6,7 @@
   </p>
 
   <h3>
-    <a href="https://portfolio-zeta-two-w94sqpil2g.vercel.app/">🌐 View Live Demo</a>
+    <a href="https://rishabhgjr.vercel.app/">🌐 View Live Demo</a>
   </h3>
 
   <p>

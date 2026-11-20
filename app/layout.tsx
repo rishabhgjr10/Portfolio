@@ -7,7 +7,7 @@ import Footer from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react";
 import { personalInfo } from "@/data/index";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio-zeta-two-w94sqpil2g.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rishabhgjr.vercel.app";
 const DESCRIPTION =
   "Rishabh Gurjar — Software Engineer at Accenture. Backend services and full-stack apps with Java, Spring Boot, .NET and Next.js.";
 
