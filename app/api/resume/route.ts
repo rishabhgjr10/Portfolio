@@ -58,25 +58,38 @@ export async function POST(request: NextRequest) {
   const bytes = Buffer.from(await file.arrayBuffer());
   if (bytes.subarray(0, 5).toString("latin1") !== "%PDF-") return fail("That file isn't a PDF.", 400);
 
-  let uploaded: Awaited<ReturnType<typeof put>>;
-  try {
-    uploaded = await put(`${RESUME_BLOB_PREFIX}RishabhGurjar-Resume.pdf`, bytes, {
-      access: "public",
-      contentType: "application/pdf",
-      // A fresh URL per upload sidesteps CDN caching of the previous version.
-      addRandomSuffix: true,
-      token,
-    });
-  } catch (err) {
-    console.error("[resume] Blob upload failed", err);
-    const detail = err instanceof Error ? err.message : "unknown error";
+  // Stores are created either private or public, and an upload must match. Try private first
+  // (the safer default; /resume streams it), then public if the store says it's public.
+  let uploaded: Awaited<ReturnType<typeof put>> | undefined;
+  let lastError: unknown;
+  for (const access of ["private", "public"] as const) {
+    try {
+      uploaded = await put(`${RESUME_BLOB_PREFIX}RishabhGurjar-Resume.pdf`, bytes, {
+        access,
+        contentType: "application/pdf",
+        // A fresh URL per upload sidesteps CDN caching of the previous version.
+        addRandomSuffix: true,
+        token,
+      });
+      break;
+    } catch (err) {
+      lastError = err;
+      const message = err instanceof Error ? err.message : "";
+      // Only retry with the other access mode when the store rejected this one.
+      if (!/access/i.test(message)) break;
+    }
+  }
+  if (!uploaded) {
+    console.error("[resume] Blob upload failed", lastError);
+    const detail = lastError instanceof Error ? lastError.message : "unknown error";
     return fail(`Blob storage rejected the upload: ${detail}`, 502);
   }
 
   // Keep only the newest resume. A cleanup failure shouldn't undo a successful upload.
+  const uploadedUrl = uploaded.url;
   try {
     const { blobs } = await list({ prefix: RESUME_BLOB_PREFIX, limit: 100, token });
-    const stale = blobs.filter((b) => b.url !== uploaded.url).map((b) => b.url);
+    const stale = blobs.filter((b) => b.url !== uploadedUrl).map((b) => b.url);
     if (stale.length > 0) await del(stale, { token });
   } catch (err) {
     console.error("[resume] Could not delete old resumes", err);
