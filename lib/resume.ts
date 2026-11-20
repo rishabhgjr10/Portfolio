@@ -17,6 +17,15 @@ export function getBlobToken(): string | undefined {
   return key ? process.env[key] : undefined;
 }
 
+/**
+ * True when Blob storage is usable. Newer Vercel Blob stores don't create a read-write token;
+ * they set BLOB_STORE_ID and the SDK authenticates with Vercel's built-in OIDC token instead.
+ * When getBlobToken() is undefined, calls pass no token and the SDK uses that path.
+ */
+export function hasBlobCredentials(): boolean {
+  return Boolean(getBlobToken() || process.env.BLOB_STORE_ID?.trim());
+}
+
 export interface StoredResume {
   url: string;
   downloadUrl: string;
@@ -25,8 +34,8 @@ export interface StoredResume {
 
 /** Newest uploaded resume, or null when none is stored or Blob isn't configured. */
 export async function getLatestResume(): Promise<StoredResume | null> {
+  if (!hasBlobCredentials()) return null;
   const token = getBlobToken();
-  if (!token) return null;
   try {
     const { blobs } = await list({ prefix: RESUME_BLOB_PREFIX, limit: 100, token });
     const newest = blobs

@@ -1,7 +1,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { del, list, put } from "@vercel/blob";
 import { NextResponse, type NextRequest } from "next/server";
-import { getBlobToken, RESUME_BLOB_PREFIX } from "@/lib/resume";
+import { getBlobToken, hasBlobCredentials, RESUME_BLOB_PREFIX } from "@/lib/resume";
 
 export const dynamic = "force-dynamic";
 
@@ -21,13 +21,15 @@ function fail(message: string, status: number) {
 /** Owner-only: replace the public resume. Requires RESUME_ADMIN_PASSWORD and BLOB_READ_WRITE_TOKEN. */
 export async function POST(request: NextRequest) {
   const expected = process.env.RESUME_ADMIN_PASSWORD;
+  // Undefined with newer Blob stores (BLOB_STORE_ID + OIDC); the SDK then authenticates itself.
   const token = getBlobToken();
+  const blobReady = hasBlobCredentials();
   // Name what's missing (never the values) so setup problems are obvious.
   const missing = [
     !expected && "RESUME_ADMIN_PASSWORD",
-    !token && "BLOB_READ_WRITE_TOKEN (connect a Blob store)",
+    !blobReady && "a connected Blob store (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN)",
   ].filter(Boolean);
-  if (!expected || !token) {
+  if (!expected || !blobReady) {
     return fail(
       `Resume upload isn't configured on this deployment. Missing: ${missing.join(", ")}. ` +
         "Add it in Vercel → Settings → Environment Variables (Production), then redeploy.",
