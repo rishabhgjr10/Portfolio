@@ -1,108 +1,135 @@
+import { ArrowUpRight, Github } from "lucide-react";
+import ProjectCardStack from "@/components/project-card-stack";
+import { oswald } from "@/data/constants/fonts";
 import { cn } from "@/lib/utils";
-import { Github, MoveUpRight } from "lucide-react";
-import Image from "next/image";
+import { Bullet, TechTag } from "./tech-tag";
 
-export const BentoGrid = ({
-  className,
-  children,
-}: {
-  className?: string;
-  children?: React.ReactNode;
-}) => {
+/** Live link for a project: direct when there's one URL, via /go/<slug> fallback routing when there are several. */
+export function liveHref(slug: string, liveUrls: readonly string[]): string {
+  return liveUrls.length > 1 ? `/go/${slug}` : liveUrls[0] ?? "#";
+}
+
+/** Green "● Live" pill, or an amber pulsing status note (e.g. Work in Progress). */
+export function StatusNote({ note }: { note: string }) {
   return (
-    <div
-      className={cn(
-        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto ",
-        className
-      )}
-    >
-      {children}
-    </div>
+    <span className="inline-flex items-center gap-2 text-xs font-medium text-primary">
+      <span className="relative flex h-2 w-2" aria-hidden="true">
+        <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 motion-safe:animate-ping" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+      </span>
+      {note}
+    </span>
   );
-};
+}
 
-export const BentoGridItem = ({
-  className,
+function LiveBadge() {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2.5 py-0.5 text-[11px] font-semibold text-success">
+      <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden="true" />
+      Live
+    </span>
+  );
+}
+
+const footerLink = "inline-flex items-center gap-1.5 text-sm font-semibold transition-colors";
+
+/** Project card (design doc §12): browser-style cover with the screenshot stack, then name, pitch, bullets, tags, links. */
+export function ProjectCard({
+  index,
+  slug,
   title,
-  description,
-  image,
+  pitch,
+  highlights,
+  screenshots,
+  statusNote,
   github,
-  live,
+  liveUrls,
   techStack,
 }: {
-  className?: string;
+  index: number;
+  slug: string;
   title: string;
-  description: string;
-  image: string;
+  pitch: string;
+  highlights: readonly string[];
+  screenshots: readonly string[];
+  statusNote?: string;
   github: string;
-  live: string;
-  techStack: string[];
-}) => {
+  liveUrls: readonly string[];
+  techStack: readonly string[];
+}) {
   return (
-    <div
-      className={cn(
-        "rounded-xl group/bento transition duration-200 p-4 dark:bg-cool-black dark:border-zinc-600 bg-white border flex flex-col justify-between h-full",
-        className
-      )}
-    >
-      <div className="group-hover/bento:translate-x-2 transition duration-200 flex flex-col h-full">
-        {/* Image container */}
-        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl border border-white/10 bg-neutral-950 mb-4">
-          <Image
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-105"
-            width={500}
-            height={500}
+    <article className="group/card relative hover:z-30 flex h-full flex-col overflow-visible rounded-2xl border border-border bg-card transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow">
+      {/* Cover: browser chrome + grid texture + glow, holding the screenshot stack */}
+      <div className="relative rounded-t-2xl border-b border-border bg-secondary/40">
+        <div className="flex items-center justify-between px-4 py-3">
+          <span className="flex gap-1.5" aria-hidden="true">
+            <span className="h-2.5 w-2.5 rounded-full bg-foreground/20" />
+            <span className="h-2.5 w-2.5 rounded-full bg-foreground/20" />
+            <span className="h-2.5 w-2.5 rounded-full bg-foreground/20" />
+          </span>
+          <span className="font-mono text-xs text-muted-foreground">{String(index).padStart(2, "0")}</span>
+        </div>
+        <div className="relative px-6 pb-6 pt-4">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-b-none text-foreground/[0.05]"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
+            }}
           />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-60 transition-opacity duration-500 group-hover/card:opacity-100"
+            style={{ background: "radial-gradient(60% 60% at 50% 40%, hsl(var(--primary) / 0.22), transparent 70%)" }}
+          />
+          <ProjectCardStack screenshots={screenshots} title={title} className="relative" />
         </div>
+      </div>
 
-        {/* Title */}
-        <div className="font-sans font-bold dark:text-zinc-100 mb-2">
-          {title}
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-6 sm:p-7">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className={cn(oswald.className, "text-3xl font-bold uppercase tracking-tight")}>{title}</h3>
+          {statusNote ? <StatusNote note={statusNote} /> : <LiveBadge />}
         </div>
+        <p className="mt-2 text-sm font-medium">{pitch}</p>
 
-        {/* Description */}
-        <div className="font-sans font-normal text-zinc-800 text-sm dark:text-neutral-300">
-          {description.length > 180
-            ? `${description.slice(0, 160)}...`
-            : description}
-        </div>
+        {highlights.length > 0 && (
+          <ul className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
+            {highlights.map((h) => (
+              <Bullet key={h}>{h}</Bullet>
+            ))}
+          </ul>
+        )}
 
-        {/* Tech stack badges */}
-        <div className="flex flex-wrap items-center gap-2 my-3 min-h-[48px]">
-          {techStack.slice(0, 8).map((tech) => (
-            <span
-              key={tech}
-              className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-amber-50 text-amber-700 dark:bg-yellow-500/15 dark:text-yellow-400"
-            >
-              {tech}
-            </span>
+        <div className="mt-5 flex flex-wrap gap-1.5">
+          {techStack.map((tech) => (
+            <TechTag key={tech}>{tech}</TechTag>
           ))}
         </div>
 
-        {/* Action links — pinned to bottom */}
-        <div className="flex gap-4 items-center mt-auto pt-2">
+        {/* Pinned to the bottom so both cards line up */}
+        <div className="mt-auto flex items-center gap-6 pt-6">
           <a
-            href={live}
+            href={liveHref(slug, liveUrls)}
             target="_blank"
             rel="noreferrer"
-            className="flex gap-2 items-center text-amber-600 dark:text-yellow-500 font-semibold"
+            className={cn(footerLink, "text-primary hover:underline")}
           >
-            <span>Live demo</span>
-            <MoveUpRight className="w-4 h-4" />
+            Live demo <ArrowUpRight className="h-4 w-4" />
           </a>
           <a
             href={github}
             target="_blank"
             rel="noreferrer"
-            className="flex gap-2 items-center text-amber-600 dark:text-yellow-500 font-semibold"
+            className={cn(footerLink, "text-muted-foreground hover:text-foreground")}
           >
-            <span>GitHub</span>
-            <Github className="w-4 h-4" />
+            <Github className="h-4 w-4" /> GitHub
           </a>
         </div>
       </div>
-    </div>
+    </article>
   );
-};
+}

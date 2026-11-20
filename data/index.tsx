@@ -1,33 +1,31 @@
 import type { ReactNode } from "react";
-import {
-  Code,
-  Braces,
-  Database,
-  Server,
-  Wrench,
-  Blocks,
-} from "lucide-react";
-import {
-  FaGithub,
-  FaLinkedinIn,
-  FaCode,
-  FaEnvelope,
-} from "react-icons/fa6";
-import { SiLeetcode, SiCodechef } from "react-icons/si";
+import { Server, Code, Cloud, Blocks, Wrench } from "lucide-react";
 
 export interface NavItem {
+  /** Hidden on phones to keep the bar on one line. */
+  desktopOnly?: boolean;
   name: string;
   link: string;
 }
 
 export interface Project {
+  /** URL-safe id, also used by /go/<slug> for live-URL fallback. */
+  slug: string;
   title: string;
-  description: string;
-  className: string;
-  image: string;
+  /** One-line pitch: what it is, in plain words. */
+  pitch: string;
+  /** 2–3 bullets on what was technically interesting. */
+  highlights: string[];
+  /** Folder under public/images/works/ holding this project's screenshots (first, alphabetically, is the cover). */
+  imageFolder: string;
   github: string;
-  live: string;
+  /** Live URLs in priority order; later ones are fallbacks if earlier ones are down. */
+  liveUrls: string[];
   techStack: string[];
+  /** Featured projects get full cards; the rest go in the "More projects" list. */
+  featured: boolean;
+  /** Optional status line shown on the card, e.g. "Work in Progress". */
+  statusNote?: string;
 }
 
 export interface ImpactItem {
@@ -38,6 +36,8 @@ export interface ImpactItem {
 export interface Experience {
   id: string;
   ico?: ReactNode;
+  /** Company logo under public/; shown instead of `ico` when set. */
+  logo?: string;
   title: string;
   company: string;
   type?: string;
@@ -46,6 +46,8 @@ export interface Experience {
   description: string;
   skills?: string[];
   impacts?: ImpactItem[];
+  /** The headline role: full card with impacts. Others render as one line. */
+  featured?: boolean;
 }
 
 export interface Education {
@@ -53,39 +55,58 @@ export interface Education {
   institution: string;
   period: string;
   grade: string;
-  highlights?: string[];
 }
 
-export interface SocialLink {
-  id: number;
-  img: ReactNode;
-  href: string;
+
+export interface Stat {
+  value: string;
   label: string;
 }
 
-export interface Skill {
-  name: string;
-  description: string;
-  percentage: number;
+export interface SkillGroup {
+  label: string;
+  items: string[];
 }
 
 export const personalInfo = {
   name: "Rishabh Gurjar",
   role: "Software Engineer",
-  phone: "+91-8824287625",
+  company: "Accenture",
+  location: "Gurugram, India",
+  availability: "Open to Software Engineer roles",
   email: "rishabhgjr10@gmail.com",
-  summary:
-    "Backend-focused Software Engineer with experience building RESTful applications and database-driven systems. Skilled in Java, C#, backend service development, and API design, with hands-on experience developing scalable applications through personal projects. Currently working as an Associate Software Engineer at Accenture, delivering feature enhancements, defect resolution, and backend improvements for enterprise ASP.NET/Oracle applications.",
+  github: "https://github.com/rishabhgjr10",
+  linkedin: "https://www.linkedin.com/in/rishabhgjr/",
+  /** Aggregated coding stats (LeetCode, CodeChef, Codeforces, GFG…). */
+  codolio: "https://codolio.com/profile/rishabhgjr10",
   tagline:
-    "I build full-stack web and backend applications — from resilient REST APIs and database-driven systems to polished, production-ready clients.",
+    "I build backend services and full-stack web apps — from REST APIs and data models to production deploys.",
+  /** Caption on the hero photo card. */
+  currently: "Shipping enterprise backends at Accenture",
+  /** Short stack shown as tags under the hero intro. */
+  heroSkills: ["Java", "Spring Boot", ".NET", "Next.js", "REST APIs", "SQL"],
+  summary: [
+    "Backend-focused Software Engineer at Accenture, shipping features, change requests and production fixes on enterprise ASP.NET MVC / Oracle applications.",
+    "Outside work I design, build and deploy full-stack apps on Java 21 / Spring Boot 3 — two of them are live in production.",
+  ],
 };
 
+/** Stable link that always serves the newest uploaded resume (see app/resume/route.ts). */
+export const RESUME_URL = "/resume";
+
 export const navItems: NavItem[] = [
-  { name: "About", link: "#about" },
-  { name: "Projects", link: "#projects" },
-  { name: "Experience", link: "#experience" },
-  { name: "Education", link: "#education" },
-  { name: "Contact", link: "#contact" },
+  { name: "Experience", link: "/#experience" },
+  { name: "Projects", link: "/#projects" },
+  { name: "Skills", link: "/#skills", desktopOnly: true },
+  { name: "About", link: "/#about", desktopOnly: true },
+  { name: "Contact", link: "/#contact" },
+];
+
+export const stats: Stat[] = [
+  { value: "20+", label: "Production issues resolved" },
+  { value: "15+", label: "Change requests delivered" },
+  { value: "2", label: "Full-stack apps live" },
+  { value: "8.42", label: "CGPA · B.Tech Computer Engg." },
 ];
 
 export const aboutHighlights = [
@@ -93,49 +114,47 @@ export const aboutHighlights = [
     ico: <Server />,
     title: "Backend Engineering",
     description:
-      "Design and ship RESTful services with Java 17, Spring Boot, C#, and ASP.NET — including persistence, validations, and production-grade API handling.",
+      "REST APIs in Java 21 / Spring Boot 3 and C# / ASP.NET MVC, with JPA/Hibernate, MySQL and Oracle underneath.",
   },
   {
     ico: <Code />,
     title: "Full-Stack Delivery",
     description:
-      "Build unified client experiences with Next.js, React, and TypeScript, connecting frontend apps to secure, well-structured backend APIs.",
+      "Next.js and React clients wired to secure, well-typed backend APIs, tested with JUnit 5 and Mockito.",
   },
   {
-    ico: <Database />,
-    title: "Data & Persistence",
+    ico: <Cloud />,
+    title: "Cloud & DevOps",
     description:
-      "Work with Spring Data JPA, Hibernate, MySQL, and Oracle to model data, optimize queries, and keep enterprise applications reliable.",
+      "Docker multi-stage builds, GitHub Actions CI, and deploys across Render, Vercel and Aiven.",
   },
+];
+
+export const skillGroups: SkillGroup[] = [
+  { label: "Languages", items: ["Java", "C#", "TypeScript", "JavaScript", "SQL"] },
   {
-    ico: <Braces />,
-    title: "API Design",
-    description:
-      "Implement resilient backend APIs with environment security, testing (JUnit, Mockito), and clear contracts for frontend consumers.",
+    label: "Backend",
+    items: ["Spring Boot 3", "Spring Security", "Spring Data JPA", "Hibernate", "ASP.NET MVC", "REST APIs"],
   },
-  {
-    ico: <Blocks />,
-    title: "Cloud-Native Deployments",
-    description:
-      "Containerize services with Docker multi-stage builds and deploy across Render, Aiven, Vercel, and GitHub CI/CD pipelines.",
-  },
-  {
-    ico: <Wrench />,
-    title: "Enterprise Delivery",
-    description:
-      "At Accenture, ship feature enhancements, change requests, and defect fixes on ASP.NET MVC / Oracle systems in a collaborative Agile team.",
-  },
+  { label: "Frontend", items: ["React", "Next.js", "Tailwind CSS", "AngularJS"] },
+  { label: "Data", items: ["MySQL", "Oracle", "Redis", "MS SQL Server"] },
+  { label: "Cloud & DevOps", items: ["Docker", "GitHub Actions", "Vercel", "Render", "Aiven", "Git"] },
+  { label: "Testing", items: ["JUnit 5", "Mockito"] },
 ];
 
 export const works: Project[] = [
   {
+    slug: "snaplink",
     title: "SnapLink",
-    description:
-      "SnapLink is an enterprise-grade URL shortener, link management, and custom QR code studio built with Java 21 (Spring Boot 3) and React 18. Engineered with Redis cache-aside fallback, Aiven MySQL, OAuth 2.0 via Firebase, and edge proxy routing with zero CORS overhead.",
-    className: "md:col-span-1",
-    image: "/images/works/snaplink.png",
+    pitch: "URL shortener with link management and a custom QR code studio.",
+    highlights: [
+      "Redis cache-aside on the redirect path with a MySQL (Aiven) fallback, so links keep resolving if the cache is down",
+      "Rate limiting with Bucket4j and OAuth 2.0 sign-in through Firebase",
+      "Edge proxy routing from Vercel to the Spring Boot API on Render, removing CORS overhead",
+    ],
+    imageFolder: "Snaplink",
     github: "https://github.com/rishabhgjr10/Snaplink",
-    live: "https://bauna.xyz",
+    liveUrls: ["https://bauna.xyz", "https://bauna.vercel.app"],
     techStack: [
       "Java 21",
       "Spring Boot 3",
@@ -143,61 +162,65 @@ export const works: Project[] = [
       "Redis",
       "MySQL (Aiven)",
       "Firebase Auth",
+      "Bucket4j",
       "Docker",
       "Tailwind CSS",
       "Vite",
       "Render",
       "Vercel",
-      "Bucket4j",
     ],
+    featured: true,
   },
   {
+    slug: "verdikt",
     title: "Verdikt",
-    description:
-      "Verdikt is a decoupled full-stack media review and data aggregation platform built with Java 17 (Spring Boot) and Next.js. It aggregates real-time data across movies, TV shows, books, and video games into a single, unified client experience while implementing resilient backend API handling, environment security, and cloud-native deployments.",
-    className: "md:col-span-1",
-    image: "/images/works/verdikt.png",
+    pitch: "One place to review and track movies, TV shows, books and video games.",
+    highlights: [
+      "Spring Boot 3 API that aggregates real-time data from multiple media sources behind one unified client",
+      "Resilient upstream API handling, Spring Security, and environment-based secret management",
+      "Tested with JUnit 5 and Mockito; CI on GitHub Actions, API on Render, Next.js client on Vercel",
+    ],
+    imageFolder: "Verdikt",
     github: "https://github.com/rishabhgjr10/Verdikt",
-    live: "https://verdikt-two.vercel.app/",
+    liveUrls: ["https://verdiikt.vercel.app/"],
     techStack: [
       "Java 17",
       "Spring Boot 3",
       "Spring Data JPA",
       "Hibernate",
-      "MySQL (Aiven)",
       "Spring Security",
+      "MySQL (Aiven)",
       "JUnit 5",
       "Mockito",
       "Next.js 14",
-      "React",
       "TypeScript",
       "Tailwind CSS",
       "Docker",
+      "GitHub Actions",
       "Render",
       "Vercel",
-      "GitHub Actions",
     ],
+    featured: true,
   },
   {
+    slug: "pathway",
     title: "Pathway",
-    description:
-      "Pathway is an interactive travel website designed to help users explore new destinations, plan trips, and get inspired. With a simple and engaging UI, it offers travel recommendations based on interests and budget.",
-    className: "md:col-span-1",
-    image: "/images/works/pathway.png",
+    pitch: "Travel discovery site with destination ideas by interest and budget.",
+    highlights: [],
+    imageFolder: "Pathway",
     github: "https://github.com/rishabhgjr10/Pathway",
-    live: "https://pathway-eta.vercel.app/",
-    techStack: [
-      "HTML5",
-      "CSS3",
-      "JavaScript",
-      "Vercel",
-    ],
+    liveUrls: ["https://pathway-eta.vercel.app/"],
+    techStack: ["HTML5", "CSS3", "JavaScript", "Vercel"],
+    featured: false,
+    statusNote: "Work in Progress",
   },
 ];
 
 export const experience: Experience[] = [
   {
     id: "accenture",
+    featured: true,
+    logo: "/Accenture-Logo.png",
     ico: <Server />,
     title: "Associate Software Engineer",
     company: "Accenture",
@@ -324,93 +347,15 @@ export const experience: Experience[] = [
   },
 ];
 
-export const experienceHighlights = experience[0].impacts?.map((i) => i.description) ?? [];
 
 export const education: Education[] = [
   {
-    degree: "Bachelor of Technology (BTech) in Computer Engineering",
+    degree: "B.Tech in Computer Engineering",
     institution: "Jaipur Engineering College and Research Centre (JECRC)",
-    period: "Nov. 2020 – May 2024",
+    period: "2020 – 2024",
     grade: "8.42 CGPA",
-    highlights: ["Python", "Data Structures", "Algorithms", "Software Engineering"],
-  },
-  {
-    degree: "Higher Secondary (12th – Science & Mathematics)",
-    institution: "Lakshmipat Singhania School",
-    period: "Mar. 2019 – Mar. 2020",
-    grade: "82.4%",
   },
 ];
 
-export const socialMedia: SocialLink[] = [
-  {
-    id: 1,
-    img: <FaGithub />,
-    href: "https://github.com/rishabhgjr10",
-    label: "GitHub",
-  },
-  {
-    id: 2,
-    img: <FaLinkedinIn />,
-    href: "https://www.linkedin.com/in/rishabhgjr/",
-    label: "LinkedIn",
-  },
-  {
-    id: 3,
-    img: <SiLeetcode />,
-    href: "https://leetcode.com/u/rishabhgjr7/",
-    label: "LeetCode",
-  },
-  {
-    id: 4,
-    img: <SiCodechef />,
-    href: "https://www.codechef.com/users/rishabh_gjr",
-    label: "CodeChef",
-  },
-  {
-    id: 5,
-    img: <FaCode />,
-    href: "https://codolio.com/profile/rishabhgjr10",
-    label: "Codolio",
-  },
-  {
-    id: 6,
-    img: <FaEnvelope />,
-    href: "mailto:rishabhgjr10@gmail.com",
-    label: "Email",
-  },
-];
 
-export const skills: Skill[] = [
-  { name: "backend", description: "Java, C#, Spring Boot, ASP.NET", percentage: 90 },
-  { name: "frontend", description: "Next.js, React, TypeScript", percentage: 80 },
-];
 
-export const skillsIcons = [
-  "java",
-  "springboot",
-  "csharp",
-  "dotnet",
-  "oracle",
-  "mysql",
-  "redis",
-  "firebase",
-  "spring",
-  "hibernate",
-  "typescript",
-  "javascript",
-  "react",
-  "nextdotjs",
-  "html5",
-  "css3",
-  "tailwindcss",
-  "nodedotjs",
-  "docker",
-  "git",
-  "github",
-  "jira",
-  "vercel",
-  "junit5",
-  "visualstudio",
-  "visualstudiocode",
-];

@@ -1,91 +1,166 @@
-"use client";
-import { oswald } from "@/data/constants/fonts";
-import { experience } from "@/data/index";
-import { Calendar, ChevronRight, MapPin } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { Calendar, ChevronRight, GraduationCap, MapPin } from "lucide-react";
+import { oswald } from "@/data/constants/fonts";
+import { education, experience } from "@/data/index";
+import { cn } from "@/lib/utils";
+import SectionHeading, { Accent } from "./section-heading";
+import { Bullet, TechTag } from "./ui/tech-tag";
+
+const INLINE_IMPACTS = 3;
+
+/** Bold amber leading metric ("10+", "98%") so numbers stand out at a glance. */
+function withMetric(text: string) {
+  const match = text.match(/\d+(?:\.\d+)?\s?[+%]+/);
+  if (!match || match.index === undefined) return text;
+  const end = match.index + match[0].length;
+  return (
+    <>
+      {text.slice(0, match.index)}
+      <strong className="font-bold text-primary">{match[0]}</strong>
+      {text.slice(end)}
+    </>
+  );
+}
+
+function SideLabel({ children }: { children: string }) {
+  return <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">{children}</h3>;
+}
 
 export default function Experience() {
-  return (
-    <section className="pb-32" id="experience">
-      <h1
-        className={`${oswald.className} font-semibold text-2xl md:text-4xl flex flex-col text-center`}
-      >
-        <span className="text-base text-amber-600">Experience</span>
-        <span>
-          My <span className="text-yellow-500">Professional Journey</span>
-        </span>
-      </h1>
+  const featured = experience.filter((r) => r.featured);
+  const earlier = experience.filter((r) => !r.featured);
 
-      {/* Full experience timeline — clickable cards */}
-      <div className="max-w-4xl mx-auto mt-10 space-y-6">
-        {experience.map((role) => (
-          <Link
-            key={role.id}
-            href={`/experience/${role.id}`}
-            className="group relative block rounded-2xl border border-white/10 bg-white dark:bg-cool-black p-6 transition-all duration-300 hover:border-amber-400/50 hover:bg-white/[0.02] cursor-pointer"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-              {/* Left: icon + details */}
-              <div className="flex items-start gap-4">
-                {role.ico && (
-                  <span className="mt-1 shrink-0 block dark:bg-yellow-500/25 bg-amber-500/25 w-max p-2.5 rounded-xl">
-                    {role.ico}
+  return (
+    <section className="pb-32 scroll-mt-24" id="experience">
+      <SectionHeading index={1} eyebrow="Experience">
+        Where I <Accent>work</Accent>
+      </SectionHeading>
+
+      <div className="mt-12 grid gap-8 lg:grid-cols-[1.6fr_1fr]">
+        {/* Current role — featured card */}
+        <div className="space-y-6">
+          {featured.map((role) => (
+            <article
+              key={role.id}
+              className="rounded-2xl border border-primary/50 bg-card p-6 sm:p-7 shadow-glow"
+            >
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-start gap-4">
+                  {role.logo ? (
+                    <Image
+                      src={role.logo}
+                      alt={`${role.company} logo`}
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 shrink-0 rounded-xl ring-1 ring-border"
+                    />
+                  ) : (
+                    <span
+                      className={cn(
+                        oswald.className,
+                        "grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-xl font-bold text-primary-foreground"
+                      )}
+                    >
+                      {role.company[0]}
+                    </span>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-bold">{role.title}</h3>
+                    <p className="text-sm font-medium text-primary">
+                      {role.company}
+                      {role.type && <span className="text-muted-foreground"> · {role.type}</span>}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex shrink-0 flex-col items-start gap-1 text-sm text-muted-foreground sm:items-end">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {role.period}
                   </span>
-                )}
-                <div>
-                  <h3 className="font-bold text-lg dark:text-zinc-100">
-                    {role.title}
-                  </h3>
-                  <p className="text-amber-600 dark:text-yellow-500 font-medium text-sm">
-                    {role.company}
-                    {role.type && (
-                      <span className="text-zinc-500 dark:text-zinc-400">
-                        {" "}
-                        · {role.type}
-                      </span>
-                    )}
-                  </p>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {role.location}
+                  </span>
                 </div>
               </div>
 
-              {/* Right: period & location */}
-              <div className="flex flex-col items-start sm:items-end gap-1 text-sm text-zinc-500 dark:text-zinc-400 shrink-0">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" />
-                  {role.period}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5" />
-                  {role.location}
-                </span>
-              </div>
-            </div>
+              <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{role.description}</p>
 
-            <p className="mt-3 text-sm dark:text-zinc-300 text-zinc-700 leading-relaxed">
-              {role.description}
-            </p>
+              {role.impacts && role.impacts.length > 0 && (
+                <ul className="mt-5 space-y-2.5 text-sm leading-relaxed">
+                  {role.impacts.slice(0, INLINE_IMPACTS).map((impact) => (
+                    <Bullet key={impact.number}>{withMetric(impact.description)}</Bullet>
+                  ))}
+                </ul>
+              )}
 
-            {/* Skill badges */}
-            {role.skills && role.skills.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-4">
-                {role.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-[10px] uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 dark:bg-yellow-500/15 dark:text-yellow-400"
-                  >
-                    {skill}
-                  </span>
+              {role.skills && role.skills.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {role.skills.map((skill) => (
+                    <TechTag key={skill}>{skill}</TechTag>
+                  ))}
+                </div>
+              )}
+
+              {role.impacts && role.impacts.length > INLINE_IMPACTS && (
+                <Link
+                  href={`/experience/${role.id}`}
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+                >
+                  All {role.impacts.length} impacts
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              )}
+            </article>
+          ))}
+        </div>
+
+        {/* Earlier roles + education */}
+        <div className="space-y-10">
+          {earlier.length > 0 && (
+            <div>
+              <SideLabel>Earlier</SideLabel>
+              <ol className="mt-5 ml-1.5 space-y-6 border-l border-border">
+                {earlier.map((role) => (
+                  <li key={role.id} className="relative pl-6">
+                    <span
+                      className="absolute -left-[5.5px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-primary bg-background"
+                      aria-hidden="true"
+                    />
+                    <p className="text-sm font-semibold">{role.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {role.company} · {role.period}
+                    </p>
+                  </li>
                 ))}
-              </div>
-            )}
-
-            {/* View details affordance */}
-            <div className="flex items-center gap-1 mt-4 text-xs font-semibold text-amber-600 dark:text-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span>View Impact Details</span>
-              <ChevronRight className="w-3.5 h-3.5" />
+              </ol>
             </div>
-          </Link>
-        ))}
+          )}
+
+          <div id="education" className="scroll-mt-24">
+            <SideLabel>Education</SideLabel>
+            {education.map((entry) => (
+              <div
+                key={entry.degree}
+                className="mt-5 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40"
+              >
+                <GraduationCap className="h-5 w-5 text-primary" />
+                <p className="mt-3 text-sm font-semibold">{entry.degree}</p>
+                <p className="text-xs text-muted-foreground">{entry.institution}</p>
+                <div className="mt-4 flex items-end justify-between gap-4">
+                  <span className="text-xs text-muted-foreground">{entry.period}</span>
+                  <span className="flex items-baseline gap-1.5">
+                    <span className={cn(oswald.className, "text-3xl font-bold text-primary leading-none")}>
+                      {entry.grade.replace(/\s*CGPA/i, "")}
+                    </span>
+                    <span className="font-mono text-[11px] uppercase text-muted-foreground">CGPA</span>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,52 +1,54 @@
+import { ArrowUp, Mail } from "lucide-react";
 import { oswald } from "@/data/constants/fonts";
-import { personalInfo, socialMedia } from "@/data/index";
-import { FaLocationArrow } from "react-icons/fa6";
+import { personalInfo } from "@/data/index";
+import { cn } from "@/lib/utils";
+import SectionHeading from "./section-heading";
 
+/**
+ * 05 · Contact card (design doc §15) + footer bar (§16).
+ * Resume / GitHub / LinkedIn live in the hero and the navbar, so they aren't repeated here.
+ */
 export default function Footer() {
   return (
-    <footer className="container">
-      <div className="w-full pb-10" id="contact">
-        <div className="flex flex-col items-center">
-          <h1
-            className={`${oswald.className} font-bold lg:max-w-[45vw] text-2xl text-center`}
-          >
-            Ready to take{" "}
-            <span className="text-amber-600 dark:text-yellow-500">your</span>{" "}
-            product to the next level?
-          </h1>
-          <p className="text-white-200 md:mt-10 my-5 text-center">
-            Reach out today and let&apos;s talk about backend systems, APIs, and
-            full-stack delivery.
-          </p>
-          <a
-            href={`mailto:${personalInfo.email}`}
-            className="uppercase font-semibold text-xs bg-cool-black dark:bg-white dark:text-black text-white rounded-full px-8 py-4 flex items-center justify-center gap-2 hover:scale-105 active:scale-100 transition-all duration-300"
-          >
-            <span>Let&apos;s get in touch</span>
-            <FaLocationArrow />
-          </a>
-        </div>
-        <div className="flex mt-16 md:flex-row flex-col justify-between items-center">
-          <p className="md:text-base text-sm md:font-normal font-light">
-            Copyright © {new Date().getFullYear()} {personalInfo.name}
-          </p>
-
-          <div className="flex items-center md:gap-3 gap-3 mt-4 md:md-0 flex-wrap justify-center">
-            {socialMedia.map((info) => (
-              <a
-                key={info.id}
-                href={info.href}
-                target="_blank"
-                rel="noreferrer"
-                title={info.label}
-                aria-label={info.label}
-                className="w-10 h-10 cursor-pointer flex justify-center items-center backdrop-filter backdrop-blur-lg saturate-180 bg-opacity-75 bg-black-200 rounded-lg border border-black-300 bg-amber-50 hover:bg-amber-100 dark:hover:text-yellow-500 transition-all duration-300 dark:bg-inherit"
-              >
-                {info.img}
-              </a>
-            ))}
+    <footer className="container relative">
+      <section id="contact" className="scroll-mt-24 pb-24">
+        <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-card px-6 py-20 text-center">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{ background: "radial-gradient(55% 70% at 50% 0%, hsl(var(--primary) / 0.18), transparent 70%)" }}
+          />
+          <div className="relative flex flex-col items-center">
+            <SectionHeading index={5} eyebrow="Contact" align="center" />
+            <h2
+              className={cn(
+                oswald.className,
+                "mt-4 max-w-3xl text-4xl sm:text-6xl font-bold uppercase leading-[0.95] tracking-tight"
+              )}
+            >
+              {personalInfo.availability} <span className="text-primary">— let&apos;s talk.</span>
+            </h2>
+            <p className="mt-6 max-w-xl text-muted-foreground">
+              Backend or full-stack, Java / Spring Boot or .NET. The fastest way to reach me is email.
+            </p>
+            <a
+              href={`mailto:${personalInfo.email}`}
+              className="mt-10 inline-flex items-center gap-2.5 rounded-full bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <Mail className="h-5 w-5" />
+              {personalInfo.email}
+            </a>
           </div>
         </div>
+      </section>
+
+      <div className="flex flex-col items-center gap-3 border-t border-border py-8 text-xs text-muted-foreground sm:flex-row sm:justify-between">
+        <p>
+          © {new Date().getFullYear()} {personalInfo.name}
+        </p>
+        <a href="#" className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
+          Back to top <ArrowUp className="h-3.5 w-3.5" />
+        </a>
       </div>
     </footer>
   );
