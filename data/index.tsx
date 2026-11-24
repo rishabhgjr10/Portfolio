@@ -68,6 +68,17 @@ export interface SkillGroup {
   items: string[];
 }
 
+export interface Certification {
+  /** Role on the badge, e.g. "Architect". */
+  role: string;
+  level: "Foundations" | "Professional";
+  /** ISO date, shown as "Sep 2026". */
+  issued: string;
+  credlyUrl: string;
+  /** Certificate PDF under /public. */
+  pdf: string;
+}
+
 export const personalInfo = {
   name: "Rishabh Gurjar",
   role: "Software Engineer",
@@ -98,6 +109,7 @@ export const navItems: NavItem[] = [
   { name: "Experience", link: "/#experience" },
   { name: "Projects", link: "/#projects" },
   { name: "Skills", link: "/#skills", desktopOnly: true },
+  { name: "Certifications", link: "/#certifications", desktopOnly: true },
   { name: "About", link: "/#about", desktopOnly: true },
   { name: "Contact", link: "/#contact" },
 ];
@@ -359,3 +371,35 @@ export const education: Education[] = [
 
 
 
+
+/** Anthropic Claude certifications, highest tier first. PDFs live in public/Certification. */
+export const certifications: Certification[] = [
+  {
+    role: "Architect",
+    level: "Professional",
+    issued: "2026-09-30",
+    credlyUrl: "https://www.credly.com/badges/40542be5-464a-4a3e-bff8-791f56df3ab6",
+    pdf: "/Certification/Claude Certified Architect - Professional.pdf",
+  },
+  {
+    role: "Architect",
+    level: "Foundations",
+    issued: "2026-09-27",
+    credlyUrl: "https://www.credly.com/badges/502ed34a-4d5d-457e-a66b-38d098caa9ef",
+    pdf: "/Certification/Claude Certified Architect - Foundations.pdf",
+  },
+  {
+    role: "Developer",
+    level: "Foundations",
+    issued: "2026-09-27",
+    credlyUrl: "https://www.credly.com/badges/5d614b9a-c7de-478d-857b-4e57b5ea8de7",
+    pdf: "/Certification/Claude Certified Developer - Foundations.pdf",
+  },
+  {
+    role: "Associate",
+    level: "Foundations",
+    issued: "2026-09-26",
+    credlyUrl: "https://www.credly.com/badges/6a495cf8-a553-4172-b9e5-7b2d3575a577",
+    pdf: "/Certification/Claude Certified Associate - Foundations.pdf",
+  },
+];

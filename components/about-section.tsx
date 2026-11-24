@@ -23,7 +23,7 @@ function emphasize(text: string): ReactNode {
 export default function About() {
   return (
     <section className="pb-32 scroll-mt-24" id="about">
-      <SectionHeading index={4} eyebrow="About">
+      <SectionHeading index={5} eyebrow="About">
         Building <Accent>backend</Accent> &amp; full-stack systems
       </SectionHeading>
 

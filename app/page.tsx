@@ -2,6 +2,7 @@ import About from "@/components/about-section";
 import Experience from "@/components/experience-section";
 import HeroSection from "@/components/hero-section";
 import Skills from "@/components/skills";
+import Certifications from "@/components/certifications-section";
 import StatsStrip from "@/components/stats-strip";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import Works from "@/components/works-section";
@@ -37,6 +38,7 @@ export default function Home() {
         <Experience />
         <Works projects={projects} />
         <Skills />
+        <Certifications />
         <About />
       </main>
     </>
